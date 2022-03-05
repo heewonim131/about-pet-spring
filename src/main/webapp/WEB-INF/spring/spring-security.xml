@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns:beans="http://www.springframework.org/schema/beans"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xmlns="http://www.springframework.org/schema/security"
+   xmlns:context="http://www.springframework.org/schema/context"
+   xmlns:tx="http://www.springframework.org/schema/tx"
+   xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd
+      http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+      http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd
+      http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd">
+ 
+    <http>
+       <!-- noticeDetail -> 로그인 인증 -> 자동 noticeDetail -->
+       <!-- 로그인 -> 인증 -> 어디로 이동 -->
+       <!-- default-target-url="" 속성 : 로그인 성공시 기본적으로 이동할 페이지 설정 -->
+       <form-login     login-page="/Project/aboutPet/header.jsp" 
+       authentication-failure-url="/Project/aboutPet/login.jsp"
+       default-target-url="/Project/aboutPet/home.jsp"
+       /> 
+       
+       <!-- 로그아웃 성공 시에 이동할 페이지 설정 -->
+       <logout logout-success-url="/Project/aboutPet/header.jsp"/> 
+           
+     <intercept-url pattern="/*" access="ROLE_USER" />
+      <!--    <intercept-url pattern="/customer/noticeReg.htm" access="ROLE_ADMIN"/>
+       <intercept-url pattern="/customer/noticeEdit.htm" access="ROLE_ADMIN"/> -->
+    </http>
+  
+  <!-- in memory방식 -->
+<!--     <authentication-manager>
+       <authentication-provider>
+         <user-service>        
+           <user name="hong" authorities="ROLE_USER" password="1111"/>
+           <user name="admin" authorities="ROLE_ADMIN" password="1234"/>
+           <user name="kenik" authorities="ROLE_USER, ROLE_ADMIN" password="1234"/>
+         </user-service>
+       </authentication-provider>
+    </authentication-manager> -->
+    
+    <!--p695 jdbc-user-service태그의 관련된 속성표  -->
+    <!--users by username -사용자 이름으로 사용자 찾기  -->
+    <!-- 유저내임의 사용자가 어떤권한을 가지고 있는지  -->
+   <authentication-manager>
+   <authentication-provider>
+   <jdbc-user-service data-source-ref="dataSource"
+    users-by-username-query="select mem_id as username, mem_pw as password, 1 as enabled 
+                                             from member where mem_id = ?"
+    authorities-by-username-query="select mem_id as  username , 
+                                        case when mem_id='AboutPet' then 'ROLE_ADMIN' else 'ROLE_USER' end as authority
+                                                 from member where mem_id = ?"
+   />
+   </authentication-provider>
+   
+   </authentication-manager>
+    
+</beans:beans>
+
+<!-- <?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.springframework.org/schema/security"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:lang="http://www.springframework.org/schema/lang"
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-4.0.xsd
+		http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-4.0.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+		http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-4.0.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+		http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang-4.0.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
+
+
+
+security:http인증과 권한의 설정  
+auto-config:true   스프링이 제공하는 전용 로그인 페이지를 이용설정 
+
+<http auto-config="true" use-expressions="true">
+<http>
+<form-login login-page="/joinus/login.htm"/>
+<intercept-url pattern="/customer/noticeDetail.htm" access="hasRole('ROLE_USER')"/>
+<intercept-url pattern="/customer/noticeReg.htm" access="hasRole('ROLE_ADMIN')"/>
+<intercept-url pattern="/customer/noticeEdit.htm" access="hasRole('ROLE_ADMIN')"/>
+
+</http>
+
+in-memory 방식 사용자 계정과 권한(Role) 
+p681 
+<authentication-manager>
+<authentication-provider>
+<user-service>
+<user name="hong" password="1111" authorities="ROLE_USER"/>
+<user name="tenk0620" password="1111" authorities="ROLE_USER,ROLE_ADMIN"/>
+<user name="admin" password="1111" authorities="ROLE_ADMIN"/>
+</user-service>
+
+</authentication-provider>
+
+
+</authentication-manager>
+
+
+
+
+</beans:beans>
+ -->
+
+
+

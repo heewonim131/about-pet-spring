@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN"
+       "http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
+       
+<tiles-definitions>
+
+  <definition name="mypage.*" template="/WEB-INF/views/mypage/inc/layout.jsp">
+  <!-- header, sidebar, footer -->
+    <put-attribute name="aside" value="/WEB-INF/views/mypage/inc/aside.jsp"></put-attribute>
+    <put-attribute name="content" value="/WEB-INF/views/mypage/{1}.jsp"></put-attribute>
+    <put-attribute name="css" value="../css/style.css"></put-attribute>
+  </definition> 
+  <definition name="mypage/order.*" template="/WEB-INF/views/mypage/inc/layout.jsp">
+  <!-- header, sidebar, footer -->
+    <put-attribute name="aside" value="/WEB-INF/views/mypage/inc/aside.jsp"></put-attribute>
+    <put-attribute name="content" value="/WEB-INF/views/mypage/order/{1}.jsp"></put-attribute>
+    <put-attribute name="css" value="../../css/style.css"></put-attribute>
+  </definition> 
+  
+  
+</tiles-definitions>

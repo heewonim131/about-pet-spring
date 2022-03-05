@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.sist.AboutPet.mapper.MemberMapper">
+ 
+ <resultMap type="org.sist.AboutPet.vo.Member" id="memberMap">
+ <id property="mem_id" column="mem_id" />
+ <result property="mem_id" column="mem_id" />
+ <result property="mem_code" column="mem_code" />
+ <result property="mem_pw" column="mem_pw" />
+ <result property="nickname" column="nickname" />
+ <result property="contact" column="contact" />
+ <result property="mem_email" column="mem_email" />
+ <result property="gr_name" column="gr_name" />
+ <result property="mem_point" column="mem_point" />
+ <result property="mem_invite" column="mem_invite" />
+ <result property="invited" column="invited" />
+ <result property="mpl_url" column="mpl_url" />
+ <result property="mtag" column="mtag" />
+ <result property="mpl_intro" column="mpl_intro" />
+ <result property="mem_img" column="mem_img" />
+ 
+ 
+ </resultMap>
+ 
+ <select id="read" resultMap="memberMap">
+ select 
+   mem_code, mem_id, mem_pw, nickname, contact, mem_email, gr_name, mem_point, mem_invite, invited,
+   mpl_url, mtag, mpl_intro, mem_img, 1 as enabled, case when mem_code=0 then 'ROLE_ADMIN' else 'ROLE_USER' end as authority
+   from member
+   where mem_id=#{mem_id}
+ 
+ 
+ 
+ </select>
+ 
+ </mapper>
