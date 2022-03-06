@@ -10,15 +10,15 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface SignUp {
 
+	@Select(" INSERT INTO MEMBER " +
+			" (MEM_CODE, MEM_ID, NICKNAME, MEM_PW, MEM_EMAIL, MEM_INVITE) ")
+   public int signUp(Member member)
+			throws ClassNotFoundException, SQLException;
+	
+	@Select(" UPDATE MEMBER " +
+			" SET MTAG = ${mtag} " +
+			" WHERE MEM_CODE = #{mem_code} ")
+   public int updateMtag(String mtag, int mem_code)
+			throws ClassNotFoundException, SQLException;
 
-	@Select("  insert into member (mem_code, mem_id, nickname , mem_pw, mem_email, MEM_INVITE ) "
-			+ "    values ( seq_member.nextval ,#{mem_id}, #{nickname}, #{mem_pw},#{mem_email} ,uv||#{mem_id}) ")
-	   public int signUp(Member member) throws ClassNotFoundException, SQLException; 
-	
-	@Select(" update member set mtag=#{mtag} where mem_code=#{mem_code} ")
-	   public int updateMtag(String mtag,int mem_code) throws ClassNotFoundException, SQLException; 
-	
-	
-	
-	
 }

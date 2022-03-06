@@ -7,12 +7,14 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="AboutPet" />
+        <module name="about-pet" />
       </profile>
     </annotationProcessing>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="AboutPet" options="-Xlint:all" />
+      <module name="about-pet" options="-Xlint:all" />
     </option>
   </component>
 </project>

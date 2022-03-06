@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpSession;
+
 @Controller
 @RequestMapping("/Project/mypage/*")
 public class MypageController {
@@ -29,11 +31,14 @@ public class MypageController {
 	private MemberDao memberDao = null;
 	@Autowired
 	private CancelService cancelService;
+	@Autowired
+	private HttpSession session;
 	
 	// 마이페이지 메인
 	@RequestMapping("myPage.do")
-	public String myPage(Principal principal, Model model) throws Exception {
-		String username = (principal != null ? principal.getName() : "Ukleouk");
+	public String myPage(Model model) throws Exception {
+		Member member = (Member) session.getAttribute("member");
+		String username = member.getMem_name();
 		// 회원정보
 		Member memberDTO = this.memberDao.getMyInfo(username);
 		// 마이펫 리스트
@@ -63,7 +68,8 @@ public class MypageController {
 	// 주문내역
 	@RequestMapping("order/orderList.do")
 	public String orderList(Principal principal, Model model) throws Exception {
-		String username = (principal != null ? principal.getName() : "Ukleouk");
+		Member member = (Member) session.getAttribute("member");
+		String username = member.getMem_name();
 		// 주문 리스트
 		List<Order> olist = this.memberDao.getOrderList(username);
 		// 주문 상품 리스트
@@ -154,26 +160,21 @@ public class MypageController {
 	// 주문취소 GET
 	@RequestMapping(value={"order/cancelReq.do"}, method=RequestMethod.GET)
 	public String cancelReq(String ordNo, String oddNo, Model model, Principal principal) throws Exception {
-		//
 		// 주문
 		Order odto = this.memberDao.getOrderDetail(ordNo);
 		// 주문 상품
 		List<Order> oilist = this.memberDao.getOrderItemDetail(ordNo);
-		// 배송지
-//		Address adto = this.memberDao.getAddress(ord_code);
 		// 결제정보
 		Payment pdto = this.memberDao.getPayDetail(ordNo);
 		
 		int returnAmt = 0;
 		
-//		int fee = 0;
 		int returnFee = 0, extraFee = 0;
 		
 		int order_cnt = oilist.size();
 		if (order_cnt == 1) oddNo = "all";
 		
-//		point = 0;
-		
+
 		if (oilist != null && !oilist.isEmpty()) {
 			Iterator<Order> ir = oilist.iterator();
 			while (ir.hasNext()) {
@@ -211,20 +212,13 @@ public class MypageController {
 			if (returnAmt >= 30000) extraFee = 2500;
 		}
 		
-//		if (pdto.getPm_price() <= 30000) fee = 2500;
-//		returnAmt += returnFee;
-//		point = (int) Math.floor( (double) pdto.getPm_price() / 1000 );
-		
 		model.addAttribute("odto", odto);
 		model.addAttribute("oilist", oilist);
-//		model.addAttribute("adto", adto);
 		model.addAttribute("pdto", pdto);
 		model.addAttribute("returnAmt", returnAmt);
-//		model.addAttribute("fee", fee);
 		model.addAttribute("returnFee", returnFee);
 		model.addAttribute("extraFee", extraFee);
-//		model.addAttribute("point", point);
-		
+
 		model.addAttribute("checkOdd", oddNo);
 		model.addAttribute("order_cnt", order_cnt);
 		
@@ -258,10 +252,4 @@ public class MypageController {
 		redirectAttributes.addAttribute("pd_method",pd_method);
 		return "redirect:mypage/order.cancelComplete.do";
 	}
-	
-	// 취소완료 cancelComplete
-	// 취소상세 cancelDetail
-	// 취소 리스트 cancelList
-	
-	// 주문&취소 order 폴더로...
 }

@@ -24,52 +24,6 @@ $(document).ready(function(){
     const nbt = "취소";
     const message = "undefined Message";
 
-    /* const messager = {
-        alert : function(option){
-            // 알럿창 띄우기
-            const defaultAlertOption = {
-                    ycb : function(){}
-                ,	ybt : ybt
-            };
-            let alertMsg = option.txt ? option.txt : message;
-            let alertConfig = $.extend(defaultAlertOption,option);
-            ui.alert("<div id='alertContentDiv'>"+alertMsg+"</div>",{
-                    ycb:function(){
-                        alertConfig.ycb();
-                        $(".popAlert").remove();
-                    }
-                ,   ybt:alertConfig.ybt
-            });
-        }
-        ,	confirm : function(option){
-                const defaultConfirmOption = {
-                        ycb : function(){console.log("confirm-ok Callback");}
-                    ,	ncb : function(){console.log("confirm-cancle Callback");}
-                    ,	ybt : ybt
-                    ,	nbt : nbt
-                };
-                let confirmMsg = option.txt ? option.txt : message;
-                let confirmConfig = $.extend(defaultConfirmOption,option);
-                ui.confirm(confirmMsg,{ // 컨펌 창 띄우기
-                    ycb:confirmConfig.ycb,
-                    ncb:confirmConfig.ncb,
-                    ybt:confirmConfig.ybt,
-                    nbt:confirmConfig.nbt
-                });
-        }
-        , toast : function(option){	//toast 띄우기
-        	ui.toast(option.txt,{
-        		cls : 'abcd' , 
-        		bot: option.bot ? option.bot : 74, //바닥에서 띄울 간격
-        		sec:  option.sec ? option.sec : 3000 //사라지는 시간
-        	})
-        }
-    }; */
-
-    /*
-     * 우편번호 팝업
-     */
-
     //디폴트 콜백
     var defaultCbPostOption = {
         callBack : function(data){
@@ -88,30 +42,6 @@ $(document).ready(function(){
     function cbPostPop(data){
     	defaultCbPostOption.callBack(data);
     }
-
-    //레이어 팝업
-     /*function layerPop(config){
-        var option = {
-                url : config.url
-            ,   data : config.data != undefined ? config.data : {}
-            ,   type : "GET"
-            ,   dataType : "HTML"
-            ,   done : function(html){
-                    var alertConfg = {
-                            txt : html
-                    };
-                    if(config.callBack != undefined){
-                        alertConfg.ycb = config.callBack;
-                    }
-                    if(config.btnTxt != undefined){
-                        alertConfg.ybt = config.btnTxt;
-                    }
-                    messager.alert(alertConfg);
-            }
-        }; 
-        ajax.call(option);
-    }*/
-    
     
     //관심태그 정보 변경 시 액션로그 api호출 - 호출 예 : fncTagInfoLogApi({ url:"/join/indexTag", targetUrl:"/join/indexResult",callback:console.log(data) });
     function fncTagInfoLogApi(config){
@@ -731,93 +661,82 @@ $(document).ready(function(){
 		var dataJson = JSON.parse(data);
 		$("#appPushToken").val(dataJson.token);
 	}
-	
+
+
 	
 	/*회원가입 처리*/
 	function insertMember(){
-	
+
 			var flag = true;
-		 	
+
 			$(".validation-check").each(function(e){
 				$(this).remove;
-			}); 
- 
+			});
+
 			if($("#join_login_id").val().length < 6 || $("#join_login_id").val().length > 40){
 				$("#join_login_id_error").html("6~40자 이내로 입력해주세요.");
-// 				$("#join_login_id").focus();
 				flag = false;
 			}
 			//아이디 공백있는 경우
 			if(!valid.login_id.test($("#join_login_id").val())){
 				$("#join_login_id_error").html("공백없이 영문, 숫자 또는 특수문자만 입력해주세요.");
-// 				$("#join_login_id").focus();
 				flag = false;
 			}
-			
+
 			//비밀번호 체크 - sns회원가입인 경우는 비밀번호 필수아님.
 			if("N" != 'Y' || (!($("#join_pswd").val() == "" || $("#join_pswd").val() == 'undefined') && "" < 40) ){
 				if($("#join_pswd").val() == ""){
 					$("#join_pswd_error").html("비밀번호를 입력해주세요.");
-// 					$("#join_pswd").focus();
 					flag = false;
 				}
-				 
+
 				var pswdCheck = pswdValid.checkPswd($("#join_pswd").val());
 				if(pswdCheck == "falseLength"){
 					$("#join_pswd_error").html("8~15자 이내로 입력해주세요.");
-//					$("#join_pswd").focus();
 					flag = false;
 				}
-				
+
 				if($("#join_pswd").val().search(/[|]/gi) > 0 || $("#join_pswd").val().search(/\s/g) > 0){
 					$("#join_pswd_error").html("공백이나 제한된 특수문자는 사용하실 수 없어요.");
-//					$("#join_pswd").focus();
 					flag = false;
 				}
-				
+
 				if(pswdCheck == "falseCheck"){
 					$("#join_pswd_error").html("영문,숫자,특수문자를 각각 1자리 이상 포함해주세요.");
-// 					$("#join_pswd").focus();
 					flag = false;
-					
+
 				}
-				
+
 				if(!pswdValid.checkPswdMatch($("#join_pswd").val())){
 					$("#join_pswd_error").html("3자리 연속 반복된 문자나 숫자는 입력할 수 없어요.");
-// 					$("#join_pswd").focus();
 					flag = false;
 				}
-				
+
 				if(!pswdValid.checkIncludeIdValue($("#join_pswd").val(), $("#join_login_id").val().replace(/-/g, '')) ){
 					$("#join_pswd_error").html("아이디와 4자 이상 동일할 수 없어요.");
-// 					$("#join_pswd").focus();
 					flag = false;
 				}
 			}
-			
+
 			if("N" == 'Y' && "" > 30 ){
 				if($("#join_nickname").val() == ""){
 					$("#join_nickNm_error").html("닉네임을 입력해주세요.");
-// 					$("#join_nickname").focus();
 					flag = false;
 				}
 			}else{
 				if($("#join_pswd_check").val() != $("#join_pswd").val()){
 					$("#join_pswd_check_error").html("동일한 비밀번호를 입력해주세요.");
-// 					$("#join_pswd_check").focus();
 					flag = false;
 				}
 
 				if($("#join_nickname").val() == ""){
 					$("#join_nickNm_error").html("닉네임을 입력해주세요.");
-// 					$("#join_nickname").focus();
 					flag = false;
 				}
 				if(!valid.ko.test($("#join_email_id").val())){
 					$("#join_email_error").html("메일 주소를 다시 확인해주세요.");//("메일 주소를 다시 확인해 주세요.");
-// 					$("#join_email_id").focus();
 					flag = false;
-					
+
 				}
 				if($("#join_nickname").val() != ''){
 					var nickNm = $("#join_nickname").val();
@@ -827,14 +746,12 @@ $(document).ready(function(){
 						if(returnCode == "banWord"){
 							if($("#join_nickname").val() != "" ){
 								$("#join_nickNm_error").html("금지어가 포함된 내용은 입력할 수 없어요.");
-	//	 						$("#join_login_id").focus();
 								flag = false
 							}
 						}else{
 							validWhenBlur.nickNm(nickNm,function(result){
 								if(result!=0){
 								$("#join_nickNm_error").html("이미 사용 중인 닉네임이에요.");
-	//		 					$("#join_nickname").focus();
 								flag = false
 								}
 							});
@@ -846,7 +763,7 @@ $(document).ready(function(){
 			if(($("#join_login_id_error")!="") || ($("#join_pswd_error")!="")){
 				window.scroll(0,0)
 			}
-			setTimeout(function(){	
+			setTimeout(function(){
 				$(".validation-check").each(
 						function(){
 							if(($(this).html())!=""){
@@ -856,120 +773,10 @@ $(document).ready(function(){
 							}
 						})
 		 	},500);
-			setTimeout(function(){
-				if(flag){
-				$("input").attr('disabled',false);
-			/* 	var options = {
-						url : "/join/insertMember",
-						data : $("#join_form").serialize(),
-						done : function(data){
-							
-							$("#mbrNo").val(data.mbrNo);
-							
-							//gsr 휴면 해제 처리 알림
-							if(data.separateNotiMsg != null && data.separateNotiMsg != ""){
-								messager.alert(data.separateNotiMsg ,"Info","info");
-							}
-							
-							if(data.returnCode == "duplicatedId"){
-								$("#join_login_id_error").html("이미 사용 중인 아이디에요.");
-	// 							$("#join_login_id").focus();
-								return false;
-							}else if(data.returnCode == "duplicatedEmail"){
-								$("#join_email_error").html("이미 사용 중인 메일 주소에요.");
-	// 							$("#join_email_id").focus();
-								return false;
-							}else if(data.returnCode == "notMatchRcomId"){
-								$("#join_rcomId_error").html("추천인 정보를 다시 확인해주세요.");
-	// 							$("#join_rcomId").focus();
-								return false;
-							}else if(data.returnCode == "duplicatedNickNm"){
-								$("#join_nickNm_error").html("이미 사용 중인 닉네임이에요.");
-	// 							$("#join_nickname").focus();
-								return false;
-							}else if(data.returnCode == "banWord"){
-								ui.toast("금지어가 포함된 내용은 입력할 수 없어요.");
-								return false;
-							}else if(data.returnCode == "existMember"){
-								//기존 회원정보와 동일한 경우
-								location.href='/join/indexExistMember';
-							}else if(data.returnCode == "connectSns"){
-								//애플,구글 로그인 시 한번더 체크 하여 기존 회원인 경우 연동
-								location.href='/join/connectSns';
-							}else{
-								//성공인 경우
-								if('PC' == "APP"){
-									toNativeData.func = 'onLogin';
-									toNative(toNativeData);  
-									
-									// 애드브릭스 호출
-									var chnl = 10;
-									var snsCd = "";
-									if(snsCd == 10) chnl = 2;
-									else if(snsCd == 20) chnl = 1;
-									else if(snsCd == 30) chnl = 4;
-									else if(snsCd == 40) chnl = 13;
-									
-									var date = new Date();
-								    var year = date.getFullYear() + "";
-								    var month = ("0" + (1 + date.getMonth())).slice(-2);
-								    var day = ("0" + date.getDate()).slice(-2);
-	
-								    var join_date = year.substr(2,2) + "." + month + "." + day; 
-									
-									onUserRegisterData.func = 'onUserRegister';
-									onUserRegisterData.SignUpChnnel = chnl;
-									onUserRegisterData.eventAttrs = {
-											user_id : $("#join_login_id").val(),
-											birth : $("#join_birth").val(),
-											join_dtm : join_date
-									};
-									toNativeAdbrix(onUserRegisterData);
-								}else{
-									//google analytics 호출
-									var pathCd = "ABOUTPET";
-									var snsCd = "";
-									if(snsCd == 10) pathCd = "NAVER";
-									else if(snsCd == 20) pathCd = "KAKAO";
-									else if(snsCd == 30) pathCd = "GOOGLE";
-									else if(snsCd == 40) pathCd = "APPLE";
-									
-									sign_up_data.method =pathCd;
-									sendGtag('sign_up');
-								}
-								
-								 fncTagInfoLogApi({ url:"/join/indexJoin", targetUrl:"/join/indexTag",callback:console.log(data) });
-								
-								location.href='join2.jsp'; 
-								
-								
-								
-								
-						
-						
-								
-								
-							}
-						}
-				};  */
-				submitSignUp();
-				ajax.call(options);
-				inputDisabled();
-				}
-				/* else{
-					$('#contents').find('.member-input').find('input').trigger('blur');
-				} */
-			},800)
-	}
-	function submitSignUp(){
+
 		$("#join_form").submit();
 	}
-	
-	//뒤에서 오기 방지
-	/*function noBack(){
-		 window.history.forward();
-	 } */
-	
+
 	 function inputDisabled(){
 		if("" != null && "" != "")  $("#join_nickname").attr('disabled',true);
 		if("" != null && "" != "" && 'N' != 'Y' )  $("#join_email_id").attr('disabled',true);
@@ -998,9 +805,8 @@ $(document).ready(function(){
 					<div class="fake-pop">
 						<div class="pct">
 							<div class="poptents">
-								 <form id="join_form" action="/AboutPet/Project/aboutPet/sign_up.do" method="post">
-								
-								
+								 <form id="join_form" action="/AboutPet/Project/aboutPet/signUp.do" method="post">
+
 								<input type="hidden" id="snsYn" name="snsYn" value="N">
 								<input type="hidden" id="termsNo" name="termsNo" value="[{termsNo:1,rcvYn:Y},{termsNo:94,rcvYn:Y},{termsNo:90,rcvYn:Y},{termsNo:93,rcvYn:Y},{termsNo:5,rcvYn:N},{termsNo:9,rcvYn:N}]">
 								<input type="hidden" id="pstInfoAgrYn" name="pstInfoAgrYn" value="N">
