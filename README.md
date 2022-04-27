@@ -34,7 +34,7 @@
 구현을 담당한 기능은 회원가입, 로그인, 마이페이지 입니다.
 
 ### 4.1. 전체 흐름
-![image](https://user-images.githubusercontent.com/92259017/156904889-ad99bb25-00af-4e15-8626-28e0702277f7.png)
+![image](https://user-images.githubusercontent.com/92259017/165451558-7f494d0e-8ed6-40dd-baf6-70f63001c3c2.png)
   
 ### 4.2. 사용자 요청
 ![image](https://user-images.githubusercontent.com/92259017/156905347-ff243520-d1b2-421a-b9ad-9c611bda662a.png)
@@ -59,7 +59,7 @@
 - **마이페이지 요청 처리** :pushpin: [코드 확인](https://github.com/heewonim131/about-pet-spring/blob/4e91c4d30efdba90c7a2c842a07af6ef6b27f8c9/src/main/java/org/sist/AboutPet/controllers/MypageController.java#L37)
   - 로그인한 세션 사용자의 회원정보를 화면단에 응답합니다.
   
-### 4.4. Repository
+### 4.4. DAO
 ![image](https://user-images.githubusercontent.com/92259017/156905021-a77d8313-0a81-461c-9f4a-de48131e0128.png)
   
 - **회원 저장** :pushpin: [코드 확인](https://github.com/heewonim131/about-pet-spring/blob/4e91c4d30efdba90c7a2c842a07af6ef6b27f8c9/src/main/java/org/sist/AboutPet/dao/SignUp.java#L13)
